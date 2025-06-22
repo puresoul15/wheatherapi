@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="card">
+    <div class="search">
+      <input type="text" placeholder="Enter the city name" spellcheck="false" class="tak">
+      <button class="searching"><img src="images/search.png"></button>
+    </div>
+      <div class="weather">
+      <img src="images/rain.png" class="weather-icon">
+      <h1 class="temp">22C</h1>
+      <h2 class="city">New york</h2>
+      <div class="details">
+        <div class="col">
+          <img src="images/humidity.png">
+          <div>
+            <p class="humidity">50%</p>
+            <p>humidity</p>
+        </div>
+      </div>
+        <div class="col">
+          <img src="images/wind.png">
+          <div>
+            <p class="wind">50%</p>
+            <p>wind speed</p>
+        </div>
+      </div>
+        
+      </div>
+  </div>
+  </div>
+
+  <script>
+  const apikey = "7c89b1181d9b7c6999a17a23fadb926b";
+const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+async function checkwheather(city) {
+  const response = await fetch(apiurl + city + `&appid=${apikey}`);
+  if (!response.ok) {
+    alert("City not found");
+    return;
+  }
+
+  const data = await response.json();
+  console.log(data);
+
+  document.querySelector(".city").innerHTML = data.name;
+  document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+  document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+  document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+
+  const weatherIcon = document.querySelector(".weather-icon");
+  const condition = data.weather[0].main;
+
+  if (condition === "Clouds") {
+    weatherIcon.src = "images/clouds.png";
+  } else if (condition === "Clear") {
+    weatherIcon.src = "images/clear.png";
+  } else if (condition === "Rain") {
+    weatherIcon.src = "images/rain.png";
+  } else if (condition === "Drizzle") {
+    weatherIcon.src = "images/drizzle.png";
+  } else if (condition === "Mist") {
+    weatherIcon.src = "images/mist.png";
+  }
+}
+
+const inputcity = document.querySelector(".tak");
+const searchbutton = document.querySelector(".searching");
+
+searchbutton.addEventListener("click", () => {
+  const city = inputcity.value.trim();
+  if (city) {
+    checkwheather(city);
+  } else {
+    alert("Please enter a valid city name");
+  }
+});
+
+checkwheather("Germany");
+
+  </script>
+</body>
+</html>
